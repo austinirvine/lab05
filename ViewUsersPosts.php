@@ -3,30 +3,13 @@ Author: Austin Irvine
 Date: October 27, 2017
 Brief: View Posts From User
 -->
-
-<!--
-   Select A User<br>
-   <select>
-     <?php
-
-     //echo "<option value='$num'";
-
-     ?>
-    <option value="volvo">Volvo</option>
-    <option value="saab">Saab</option>
-    <option value="mercedes">Mercedes</option>
-    <option value="audi">Audi</option>
-   </select>
-   <input type="text" id="username" name="username"><br>
- -->
-
 <html>
 	<body>
   		<?php
       //Error Checking..
-  		ini_set('display_errors', 1);
+  		/*ini_set('display_errors', 1);
   		ini_set('display_startup_errors', 1);
-  		error_reporting(E_ALL);
+  		error_reporting(E_ALL);*/
 
       //Jump Into the Database
       $mysqli = new mysqli("mysql.eecs.ku.edu", "airvine", "derek", "airvine");
@@ -40,32 +23,32 @@ Brief: View Posts From User
   		** Section 1 Brief: SELECT A USER
   		*/
       echo "<h3>Select A User & View Their Posts</h3><br>";
+			echo "<form action='ViewUsersPosts.php' method='POST'>";
       $userSelection = "SELECT user_id FROM Users;";
 
-      if($result = $mysqli->query($userSelection))
+			if($result = $mysqli->query($userSelection))
       {
   			if(mysqli_num_rows($result) > 0)
   			{
-          echo'<form action="ViewUserPosts.php" method="POST"';
-          echo "<select name='user'>";
+					echo "<select name='user'>";
   				while ($rowValue = $result->fetch_assoc()) {
-  					echo ("<option value='" . $rowValue["user_id"] . "'>" . $userSelection);
-            echo ("</option>");
+  					echo "<option value='" . $rowValue['user_id'] . "'>" . $rowValue['user_id'] . "</option>";
   	      }
-          echo '</select> <input type="submit">';
-          echo'</form>';
+          echo "</select>";
   			}
   			else {
   				echo "There are no user to select from...";
   			}
       }
+			echo '<input type="submit" value="Submit">';
+			echo "</form>";
   		/* END Section
   		**/
 
       /*
   		** Section 2 Brief: Post Portion
   		*/
-      $user = $_POST['username'];
+      $user = $_POST['user'];
 
       $queryPosts = "SELECT post_id, content, author_id FROM Posts WHERE author_id='$user'";
 
@@ -91,6 +74,5 @@ Brief: View Posts From User
 
   	  $mysqli->close();
   	?>
-    </select>
 	</body>
 </html>
